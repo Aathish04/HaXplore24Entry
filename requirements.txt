@@ -1,0 +1,7 @@
+wfdb
+heartpy
+picamera
+opencv-python
+matplotlib
+PIL
+numpy
