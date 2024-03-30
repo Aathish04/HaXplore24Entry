@@ -19,10 +19,6 @@ magic_numbers = {
 
 max_read_size = max(len(m) for m in magic_numbers.values()) 
 
-
-
-
-
 def putFile(filepath):
     register_implementation(AsyncIPFSFileSystem.protocol, AsyncIPFSFileSystem)
     class fs:
@@ -61,7 +57,8 @@ def getFile(cid):
         file.write(content)
     return content
 
-c= putFile('sample.jpg')
+c= putFile('jpeg-home.jpeg')
+c = getFile(c)
 print(c)
 print('Done!')
 

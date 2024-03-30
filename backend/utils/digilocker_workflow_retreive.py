@@ -1,6 +1,7 @@
 import requests
 import os
-
+from dotenv import load_dotenv
+load_dotenv()
 def get_document(request_id,docType,format,consent):
     url = f"https://dg-sandbox.setu.co/api/digilocker/{request_id}/document"
 
@@ -58,7 +59,7 @@ import json
 
 # print(get_document(request_id="",docType="AADHAAR",format="pdf",consent="Y")
 # print(json.dumps(get_status(request_id=""),indent=4))
-print(json.dumps(get_aadhaar(request_id=""),indent=4))
+# print(json.dumps(get_aadhaar(request_id=""),indent=4))
 
 
 # print(json.dumps(list_documents_available(),indent=4))

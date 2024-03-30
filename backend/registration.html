@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Completion Form</title>
+    <style>
+        /* Mobile-friendly styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        .success-message {
+            color: green;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Contact Form</h2>
+        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message"></div>
+        <form id="contact-form">
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <input type="hidden" id="id" name="id" value="">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+
+            if (success !== 'True') {
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = "Error: Failed to load form. Please try again later.";
+            } else {
+                const id = urlParams.get('id');
+                document.getElementById('id').value = id;
+            }
+
+            const contactForm = document.getElementById('contact-form');
+            contactForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(contactForm);
+                const formDataObject = {};
+                formData.forEach((value, key) => {
+                    formDataObject[key] = value;
+                });
+
+                try {
+                    const response = await fetch('https://frank-dinosaur-virtually.ngrok-free.app/create_account', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formDataObject)
+                    });
+
+                    if (response.ok) {
+                        const successMessage = document.getElementById('success-message');
+                        successMessage.textContent = "Form submitted successfully!";
+                    } else {
+                        throw new Error('Failed to submit form');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
