@@ -3,6 +3,10 @@ from appwrite.services.users import Users
 from appwrite.services.databases import Databases
 from appwrite.id import ID
 
+from appwrite.client import Client
+from appwrite.exception import AppwriteException
+from appwrite.services.account import Account
+
 client = Client()
 
 (client
@@ -21,5 +25,10 @@ UserInformation_CollectionID= "66079e7c000cd257b449"
 Doctor_CollectionID = "660804510032437783a5"
 
 # Create attributes in the hospital collection 
-r =databases.create_email_attribute(database_id=Database_ID,collection_id=Hospital_CollectionID,key="Email",required=False)
-print(r)
+account = Account(client)
+try:
+    r = account.create_email_password_session("aathish04@gmail.com","chabalchabal")
+    print(r["$id"])
+except AppwriteException as e:
+    print(e.message)
+# print(r)
