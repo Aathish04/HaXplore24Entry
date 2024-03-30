@@ -5,7 +5,7 @@ from fastapi import FastAPI,Request
 import json
 # from . import utils.digilocker_workflow_retreive import get_aadhaar
 import backend.appwrite.appwrite_functionalities as appwrite_functionalities
-from backend.utils.digilocker_workflow_retreive import get_aadhaar
+from backend.utils.digilocker import get_aadhaar,get_digilocker_flow_url
 # import utils.digilocker_workflow_retreive.get_aadhaar import get_aadhaar
 from fastapi.responses import HTMLResponse
 app = FastAPI()
@@ -62,6 +62,9 @@ async def login(request:Request):
     else:
         return r["$id"] #session ID
 
+@app.get("/init_digilocker_flow")
+async def init_digilocker_flow(request:Request):
+    return get_digilocker_flow_url()
 
 if __name__ == "__main__":
     import uvicorn
