@@ -5,3 +5,5 @@ opencv-python
 matplotlib
 PIL
 numpy
+ipfshttpclient
+ipfspy
