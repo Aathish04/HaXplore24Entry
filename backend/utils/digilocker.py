@@ -63,3 +63,7 @@ def get_status(request_id):
     }
     response = requests.request("get", url, headers=headers)
     return response.json()
+
+
+if __name__=="__main__":
+    # get_digilocker_flow_url()
