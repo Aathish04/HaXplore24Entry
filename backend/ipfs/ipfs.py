@@ -25,14 +25,14 @@ def getFile(cid):
     print(content)
     fs.ipfs.close()
 
-    file_path = os.path.join('backend/ipfs/data/', 'file.pdf')
+    file_path = os.path.join('C:/Users/alamu/Documents/HaXplore24Entry/backend/ipfs/data/', 'file.pdf')
 
     # Write the binary content to the file
     with open(file_path, 'wb') as file:
         file.write(content)
     return content
 
-c= putFile('Resume.pdf')
+c= putFile('C:/Users/alamu/Documents/HaXplore24Entry/backend/ipfs/Jahnavi-Alamelu.pdf')
 print(c)
 print(getFile(c))
 

@@ -802,7 +802,17 @@ services:
   #     - appwrite
   #   volumes:
   #     - appwrite-uploads:/storage/uploads
-
+  kubo:
+      container_name: ipfs_host
+      volumes:
+          - ../ipfs/ipfs_staging:/export
+          - ../ipfs/ipfs_data:/data/ipfs
+      ports:
+          - 4001:4001
+          - 4001:4001/udp
+          - 127.0.0.1:8080:8080
+          - 127.0.0.1:5001:5001
+      image: ipfs/kubo:latest
 networks:
   gateway:
     name: gateway
