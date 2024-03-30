@@ -142,7 +142,7 @@ def getHR():
 
 if __name__ == "__main__":
     # Have an end point here
-    getHR()
+    print(getHR())
 
 
     
