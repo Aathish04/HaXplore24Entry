@@ -1,23 +1,18 @@
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Pressable, TouchableOpacity} from "react-native";
 import Textbox from "../Components/Textbox";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useState,React } from "react";
 import MyPassword from "../Components/Password";
 import login_cache from "../cached_data/translated_texts_login.json"
-
+import processText from '../utils/processText';
 export default function Login()
 {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [language, setLanguage] = useState('hi');
+    const [language, setLanguage] = useState('en');
     
     
-    const processText = (text) => {
-        // Example processing: convert text to uppercase
-
-        return login_cache[text][language];
-    };
 
     return(
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -27,7 +22,7 @@ export default function Login()
                 <View style={styles.inputContainer}>
                     <Textbox
                         value={email}
-                        placeholder={processText("Email")}
+                        placeholder={processText("Phone Number")}
                         onChange={setEmail}
                     />
                     <MyPassword
@@ -43,10 +38,7 @@ export default function Login()
                     onPress={ () => {navigation.navigate("Home")}}>
                     <Text style={styles.buttonText}> {processText("Login")}</Text>
                 </Pressable>
-                <Text style={{ color: '#112A46' }}>  {processText("Don't have an account?")} </Text>
-                <TouchableOpacity onPress={() => { navigation.navigate('SignUp') }}>
-                    <Text style={styles.signup}>{processText("SignUp")}</Text>
-                </TouchableOpacity>
+
             </View>
         </ScrollView>
     </SafeAreaView>

@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-
+import processText from '../utils/processText';
 const AppPage = ({ navigation }) => {
     //Slide till sos
   const slideX = useRef(new Animated.Value(0)).current;
@@ -56,12 +56,18 @@ const AppPage = ({ navigation }) => {
     console.log(`${button} button pressed`);
   };
 
+//   const processText = (text) => {
+//     // Example processing: convert text to uppercase
+
+//     return text.toUpperCase()
+// };
+
   return (
     <SafeAreaView style={styles.container}>
       <AntDesign style={styles.settings} name="setting" size={35} color="black" onPress={()=>{navigation.navigate('Settings')}} />
       <View style={styles.profileContainer}>
-      <Text style={styles.profileName}>Welcome, Grammie!👋</Text>
-      
+      <Text style={styles.profileName}>{processText("Welcome Grammie!")}👋</Text>
+    
       </View>
       <View style={styles.buttonContainer}>
         {/* Medical Records Button */}
@@ -70,7 +76,7 @@ const AppPage = ({ navigation }) => {
           onPress={() => {navigation.navigate('MedicalRecords')}}
         >
           <Ionicons name="document-text-outline" size={40} color="blue" />
-          <Text style={styles.buttonText}>Medical Records</Text>
+          <Text style={styles.buttonText}>{processText("Medical Records")}</Text>
         </TouchableOpacity>
 
         {/* Hospital Visit Button */}
@@ -79,7 +85,7 @@ const AppPage = ({ navigation }) => {
           onPress={() => console.log('Hospital Visit')}
         >
           <FontAwesome name="hospital-o" size={40} color="green" />
-          <Text style={styles.buttonText}>Hospital Visit</Text>
+          <Text style={styles.buttonText}>{processText("Doctor Visit")}</Text>
         </TouchableOpacity>
 
         {/* Medicine Reminder Button */}
@@ -88,16 +94,16 @@ const AppPage = ({ navigation }) => {
           onPress={() => {navigation.navigate('MedReminder')}}
         >
           <Ionicons name="timer-outline" size={40} color="orange" />
-          <Text style={styles.buttonText}>Medicine Reminder</Text>
+          <Text style={styles.buttonText}>{processText("Tele consult")}</Text>
         </TouchableOpacity>
 
         {/* Check Up Button */}
         <TouchableOpacity 
           style={[styles.individualButton, {borderColor: 'red'}]} 
-          onPress={() => console.log('Check Up')}
+          onPress={() => navigation.navigate('UpdateVitals')}
         >
           <Ionicons name="heart-outline" size={40} color="red" />
-          <Text style={styles.buttonText}>Check Up</Text>
+          <Text style={styles.buttonText}>{processText("Update Vitals")}</Text>
         </TouchableOpacity>
       </View>
       <Modal

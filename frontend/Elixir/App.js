@@ -5,8 +5,10 @@ import HomePage from './Screens/Home';
 import MedicalRecordsPage from './Screens/MedicalRecords';
 import SettingsPage from './Screens/Settings';
 import MedReminderScreen from './Screens/Reminder';
-import SignUp from './Screens/SignUp';
+
 import Login from './Screens/Login';
+import UpdateVitals from './Screens/UpdateVitals';
+import VideoRecorder from './Screens/Camera';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -19,8 +21,9 @@ export default function App() {
         <Stack.Screen name="MedicalRecords" component={MedicalRecordsPage}  options={{ headerShown: false }}/>
         <Stack.Screen name="Settings" component={SettingsPage} options={{headerShown:false}}/>
         <Stack.Screen name="MedReminder" component={MedReminderScreen} options={{headerShown:false}}/>
-        <Stack.Screen name="SignUp" component={SignUp} options={{headerShown:false}}/>
+        <Stack.Screen name="UpdateVitals" component={UpdateVitals} options={{headerShown:false}}/>
         <Stack.Screen name="Login" component={Login} options={{headerShown:false}}/>
+        <Stack.Screen name="Camera" component={VideoRecorder} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
