@@ -4,17 +4,17 @@
 from fastapi import FastAPI,Request
 import json
 # from . import utils.digilocker_workflow_retreive import get_aadhaar
-import appwrite_functionalities
-from utils.digilocker_workflow_retreive import get_aadhaar
+import backend.appwrite.appwrite_functionalities as appwrite_functionalities
+from backend.utils.digilocker_workflow_retreive import get_aadhaar
+# import utils.digilocker_workflow_retreive.get_aadhaar import get_aadhaar
 from fastapi.responses import HTMLResponse
 app = FastAPI()
 
 @app.get("/digilocker_request_result_webhook")
 async def digilocker_request_result_webhook(request:Request):
     outcome=dict(request.query_params)
-    f = open("C:/Users/alamu/Documents/HaXplore24Entry/backend/registration.html","r")
-    html_content = f.read()
-    f.close()
+    with open("backend/registration.html","r") as f:
+        html_content = f.read()
     return HTMLResponse(content=html_content,status_code=200)
     # return {"message": f"Received GET request with parameters: {str(outcome)}"}
 
