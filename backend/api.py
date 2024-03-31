@@ -2,13 +2,16 @@
 
 from fastapi import FastAPI,Request
 import backend.appwrite.appwrite_functionalities as appwrite_functionalities
+from appwrite.id import ID
 from backend.utils.digilocker import get_aadhaar,get_digilocker_flow_url
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from datetime import date
-import ocr
-from ipfs import ipfs
+import backend.utils.ocr as ocr
+from backend.ipfs import ipfs
+import tempfile
+import os
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="backend/static"), name="static")
@@ -75,38 +78,31 @@ async def evaluate_vitals(request:Request):
 async def perform_ocr(request:Request):
     #json format from frontend : {user_id:userid,record_type:prescription/report,type:pdf/jpg,binary:}
     s = await request.json()
-    print(s)
-    return {"s":s}
-    date = str(date.today())
+    analysisfile = tempfile.NamedTemporaryFile(suffix=f".{s["type"]}")
+    with open("hello.txt","a") as f:
+        f.write(analysisfile.name)
+    import base64
+    analysisfile.write(base64.b64decode(s["binary"]))
     userid = s["user_id"]
     record_type = s["record_type"]
-    type = s["type"]
-    binary = s["binary"]
-    if type == "pdf":
-        path = "/tmp/" + userid+"_"+record_type+"_"+date+"/.pdf"
-    else:
-        path = "/tmp/" + userid+"_"+record_type+"_"+date+"/.jpg"
-
-    f = open(path,"w")
-    f.write(binary)
-    f.close()
-    text_in_file = ocr.performOCR(path)
-    f = open(path,"w")
+    text_in_file = ocr.performOCR(analysisfile.name)
+    f = open(f"{userid}_{record_type}_{str(date.today())}","w")
     f.write(text_in_file)
     f.close()
-    cid = ipfs.putFile(path)
+    cid = ipfs.putFile(f"{userid}_{record_type}_{str(date.today())}")
     # add to user document in appwrite
     d = appwrite_functionalities.initialize()
     databases = d["Databases"]
-    existing_document = databases.get_document(database_id = '66071664001e1106b8bc',
-                                               collection_id = '66079e7c000cd257b449',
-                                               document_id = userid)
-
-    result = databases.update_document(
+    data={
+        "CID":cid,
+        "Type":record_type,
+        "User":userid
+    }
+    result = databases.create_document(
         database_id = '66071664001e1106b8bc',
-        collection_id = '66079e7c000cd257b449',
-        document_id = userid,
-        data = {}, # optional
+        collection_id = '66094d350012862914d0',
+        document_id = ID.unique(),
+        data = data, # optional
     )
 
 if __name__ == "__main__":

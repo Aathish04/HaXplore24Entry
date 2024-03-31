@@ -56,10 +56,10 @@ def getFile(cid):
     with open(file_path, 'wb') as file:
         file.write(content)
     return content
-
-c= putFile('jpeg-home.jpeg')
-c = getFile(c)
-print(c)
-print('Done!')
+if __name__=="__main__":
+    c= putFile('/Users/aathishs/Projects/HaXplore24Entry/hello.txt')
+    c = getFile(c)
+    print(c)
+    print('Done!')
 
 

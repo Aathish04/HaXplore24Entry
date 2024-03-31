@@ -6,7 +6,7 @@ import os.path
 
 
 # Path to the Tesseract executable (you might need to adjust this based on your installation)
-pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+pytesseract.pytesseract.tesseract_cmd = r'/opt/homebrew/bin/tesseract'
 
 
 
@@ -63,6 +63,6 @@ def performOCR(filename):
         return ocr(filename)
 
 
-filename = 'sample.png'
+# filename = 'sample.png'
 
-print(performOCR(filename))
+# print(performOCR(filename))
