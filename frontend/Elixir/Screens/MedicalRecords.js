@@ -53,18 +53,18 @@ const MedicalRecordsPage = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 50,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+        paddingTop: 50,
+        
+    },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '90%',
     marginBottom: 170,
+    marginLeft:30,
   },
   headerText: {
     fontSize: 25,
@@ -87,10 +87,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft:40,
   },
   imagePickerText: {
     color: '#303030',
-    fontSize:25,
+    fontSize:30,
   },
   imagePreview: {
     width: '100%',
@@ -100,9 +101,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#4CAF50',
     borderRadius: 20,
     paddingVertical: 30,
-    paddingHorizontal: 60,
+    paddingHorizontal: 40,
+    width:'80%',
     elevation: 2,
+    marginLeft:40,
+    alignItems:'center'
   },
+
   submitButtonText: {
     color: 'white',
     fontSize: 25,
@@ -110,6 +115,7 @@ const styles = StyleSheet.create({
   },
   linkContainer: {
     marginTop: 20,
+    marginLeft:50,
   },
   linkText: {
     fontSize: 18,
