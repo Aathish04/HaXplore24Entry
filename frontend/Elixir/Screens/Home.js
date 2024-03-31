@@ -5,6 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
+import translations from "../cached_data/translated_texts_home.json";
 
 const AppPage = ({ navigation }) => {
   //Slide till sos
@@ -65,20 +66,20 @@ const AppPage = ({ navigation }) => {
   const photo = 'data:image/jpeg;base64,' + params.Photograph
 
 
-  function processText(key,language='hi')
+  function processText(key,language='en')
   {
-      // if (translations[key][language]) 
-      // {
-      //     // Return the translation for the specified language
-      //     return translations[key][language];
-      // } 
-      // else
-      //    {
-      //     // If the specified language doesn't exist, fallback to English
-      //     return translations[key]['en'];
-      //  }     
+      if (translations[key][language]) 
+      {
+          // Return the translation for the specified language
+          return translations[key][language];
+      } 
+      else
+         {
+          // If the specified language doesn't exist, fallback to English
+          return translations[key]['en'];
+       }     
       
-      return key.toUpperCase();
+      
   }
 
 

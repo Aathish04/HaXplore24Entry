@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Button, TouchableOpacity, Text } from 'react-native'; // Import TouchableOpacity and Text
 import { Ionicons, FontAwesome } from '@expo/vector-icons'; // Import Ionicons and FontAwesome icons
 import { StyleSheet } from 'react-native';
+import translations from "../cached_data/translated_texts_login.json";
 
 export default function UpdateVitals({ navigation }) {
     // Define functions for button click events
@@ -13,6 +14,23 @@ export default function UpdateVitals({ navigation }) {
     const updateVitals = () => {
         // Add your logic for updating vitals here
         console.log("Updating Vitals...");
+    }
+
+    function processText(key,language='ta')
+    {
+        // if (translations[key][language]) 
+        // {
+        //     // Return the translation for the specified language
+        //     return translations[key][language];
+        
+        // } 
+        // else
+        //    {
+        //     // If the specified language doesn't exist, fallback to English
+        //     return translations[key]['en'];
+        //  }   
+         
+         return key.toUpperCase();
     }
 
     return (
