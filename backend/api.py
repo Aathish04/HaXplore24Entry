@@ -39,9 +39,6 @@ async def create_account(request:Request):
     users = d["Users"]
     databases = d["Databases"]
     appwrite_functionalities.create_account(users,databases,MAadhar,Name,Gender,DateOfBirth,Email,Phone,Photograph,Password,Address,DigilockerRequestID,labels=["user"])
- 
-    with open("sample.json","w") as f:
-        json.dump(aadhar_json,f)
     return s
 
 @app.post("/login")
