@@ -71,3 +71,6 @@ def login(client,Email,Password,Phone):
   except AppwriteException as e:
       print(e.message)
       return -1
+  
+  
+  
