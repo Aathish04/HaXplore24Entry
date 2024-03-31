@@ -33,17 +33,12 @@ async def create_account(request:Request):
     Name = aadhar_json["aadhaar"]["name"]
     Photograph = aadhar_json["aadhaar"]["photo"]
     MAadhar = aadhar_json["aadhaar"]["maskedNumber"]
-    if  aadhar_json["aadhaar"]["gender"] == "F":
-        Sex = "Female"
-    elif  aadhar_json["aadhaar"]["gender"] == "M":
-        Sex = "Male"
-    else:
-        Sex = "Transgender"
+    Gender = aadhar_json["aadhaar"]["gender"]
 
     d = appwrite_functionalities.initialize()
     users = d["Users"]
     databases = d["Databases"]
-    appwrite_functionalities.create_account(users,databases,MAadhar,Name,Sex,DateOfBirth,Email,Phone,Photograph,Password,Address,DigilockerRequestID,labels=["user"])
+    appwrite_functionalities.create_account(users,databases,MAadhar,Name,Gender,DateOfBirth,Email,Phone,Photograph,Password,Address,DigilockerRequestID,labels=["user"])
  
     with open("sample.json","w") as f:
         json.dump(aadhar_json,f)

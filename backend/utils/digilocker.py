@@ -66,4 +66,5 @@ def get_status(request_id):
 
 
 if __name__=="__main__":
-    # get_digilocker_flow_url()
+    print(get_digilocker_flow_url())
+    pass
