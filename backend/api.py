@@ -12,6 +12,8 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 templates = Jinja2Templates(directory="backend/static/templates")
 
+app.mount("/doctor", StaticFiles(directory="backend/static/doctor_dashboard"), name="doctor")
+
 @app.get("/digilocker_request_result_webhook")
 async def digilocker_request_result_webhook(request:Request):
     return templates.TemplateResponse(
