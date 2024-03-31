@@ -1,22 +1,17 @@
 # ngrok http --domain=frank-dinosaur-virtually.ngrok-free.app 80
 
-# from appwrite_functionalities import *
 from fastapi import FastAPI,Request
-import json
-# from . import utils.digilocker_workflow_retreive import get_aadhaar
 import backend.appwrite.appwrite_functionalities as appwrite_functionalities
 from backend.utils.digilocker import get_aadhaar,get_digilocker_flow_url
-# import utils.digilocker_workflow_retreive.get_aadhaar import get_aadhaar
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 app = FastAPI()
-
+templates = Jinja2Templates(directory="backend/static/templates")
 @app.get("/digilocker_request_result_webhook")
 async def digilocker_request_result_webhook(request:Request):
-    outcome=dict(request.query_params)
-    with open("backend/registration.html","r") as f:
-        html_content = f.read()
-    return HTMLResponse(content=html_content,status_code=200)
-    # return {"message": f"Received GET request with parameters: {str(outcome)}"}
+    return templates.TemplateResponse(
+            request=request, name="registration.html"
+        )
 
 @app.post("/create_account")
 async def create_account(request:Request):
