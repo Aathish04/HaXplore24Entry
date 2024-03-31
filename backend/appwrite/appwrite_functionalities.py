@@ -4,8 +4,10 @@ from appwrite.exception import AppwriteException
 from appwrite.services.users import Users
 from appwrite.services.databases import Databases
 from appwrite.id import ID
-
+from Crypto.PublicKey import RSA
 from appwrite.services.account import Account
+from appwrite.permission import Permission
+from appwrite.role import Role
 
 Database_ID = "66071664001e1106b8bc"
 Hospital_CollectionID = "6608044500387ef00454"
@@ -26,33 +28,46 @@ def initialize():
   databases = Databases(client)
   return {"Client":client, "Users":users, "Databases":databases}
 
-def create_account(users,databases,MAadhar,Name,Sex,DOB,Email,Phone,Photograph,Password,Address,DigilockerRequestID,labels=["user"]):
+def create_account(users,databases,MAadhar,Name,Gender,DOB,Email,Phone,Photograph,Password,Address,DigilockerRequestID,labels=["user"]):
   try:
     r = users.create(user_id=Phone, email = Email, phone = "+91"+ Phone, password = Password, name = Name)
     users.update_labels(user_id=Phone,labels=labels)
   except AppwriteException as e:
     print(e.message)
+  key_pair = RSA.generate(2048)
 
-  document = {"Name":Name,
-              "Sex":Sex,
+  document = {
+              "Gender":Gender,
+              "Name":Name,
               "Address":Address,
-              "MaskedAadhaar":MAadhar,
+              "MAadhaar":MAadhar,
               "Photograph":Photograph,
               "DigilockerRequestID":DigilockerRequestID,
-              "DOB":str(datetime.strptime(DOB, '%d-%m-%Y').date())
+              "DOB":str(datetime.strptime(DOB, '%d-%m-%Y').date()),
+              "PublicKey":key_pair.publickey().exportKey().decode("utf-8"),
+              "PrivateKey":key_pair.exportKey().decode("utf-8"),
               }
   try:
-    result = databases.create_document(Database_ID, UserInformation_CollectionID, Phone, document)  
+    result = databases.create_document(Database_ID, UserInformation_CollectionID, Phone, document,[
+      Permission.update(Role.user(Phone)),Permission.read(Role.user(Phone))
+      ])
+    
+    
   except AppwriteException as e:
     print(e.message)
 
 
-def login(client,Email,Password):
+def login(client,Email,Password,Phone):
   account = Account(client)
   try:
     r = account.create_email_password_session(Email,Password)
-    return r
+    print(r)
+    databases = Databases(client)
+    user_info = databases.get_document(database_id=Database_ID,
+                           collection_id=UserInformation_CollectionID,
+                           document_id=Phone)
+
+    return user_info
   except AppwriteException as e:
       print(e.message)
       return -1
-
