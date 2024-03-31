@@ -12,7 +12,9 @@ export default function VideoRecorder() {
   const [videoUri, setVideoUri] = useState();
   const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.torch);
   let cameraRef = null;
-    let uri_ = ""
+  
+  
+
   useEffect(() => {
     (async () => {
       const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync();
@@ -33,8 +35,9 @@ export default function VideoRecorder() {
           mute: true, // Record audio along with video
         });
         setVideoUri(uri);
+        console.log(uri)
         bin = await convertMP4ToBinary(uri)
-        console.log(bin)
+       
     
       } catch (error) {
         console.error('Error recording video:', error.message);

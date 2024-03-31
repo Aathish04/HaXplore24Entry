@@ -9,6 +9,7 @@ const MedicalRecordsPage = ({ navigation }) => {
   const [fileUri, setFileUri] = useState(null);
   const [filename, setFilename] = useState(null);
   const [link, setLink] = useState('');
+  const [recordType, setRecordType] = useState('Prescription'); // Default to Prescription
 
   const pickPDF = async () => {
     try {
@@ -45,18 +46,36 @@ const MedicalRecordsPage = ({ navigation }) => {
     setLink(fakeLink);
   };
 
+  function processText(key,language='ta')
+  {
+      return key.toUpperCase();  
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Ionicons name="arrow-back" size={24} color="black" onPress={() => navigation.goBack()} />
-        <Text style={styles.headerText}>Upload Medical Records</Text>
+        <Text style={styles.headerText}>{processText("Upload Medical Records")}</Text>
       </View>
-    
+      <View style={styles.radioContainer}>
+        <TouchableOpacity
+          style={[styles.radioButton, recordType === 'Prescription' && styles.selectedRadioButton]}
+          onPress={() => setRecordType('Prescription')}
+        >
+          <Text style={styles.radioText}>{processText("Prescription")}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.radioButton, recordType === 'Report' && styles.selectedRadioButton]}
+          onPress={() => setRecordType('Report')}
+        >
+          <Text style={styles.radioText}>{processText("Report")}</Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity style={styles.filePicker} onPress={pickPDF}>
-        <Text style={styles.filePickerText}>Select PDF</Text>
+        <Text style={styles.filePickerText}>{processText("Select PDF")} </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.filePicker} onPress={pickImage}>
-        <Text style={styles.filePickerText}>Select Image</Text>
+        <Text style={styles.filePickerText}>{processText("Select Image")}</Text>
       </TouchableOpacity>
       {fileUri && (
         <View style={styles.previewContainer}>
@@ -69,7 +88,7 @@ const MedicalRecordsPage = ({ navigation }) => {
         </View>
       )}
       <Pressable style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Submit</Text>
+        <Text style={styles.submitButtonText}>{processText("Submit")}  </Text>
       </Pressable>
       {link !== '' && (
         <View style={styles.linkContainer}>
@@ -82,12 +101,11 @@ const MedicalRecordsPage = ({ navigation }) => {
 };
  
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-        paddingTop: 50,
-        
-    },
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingTop: 50,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -100,6 +118,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 30,
   },
+  radioContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  radioButton: {
+    borderWidth: 1,
+    borderColor: '#303030',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginHorizontal: 10,
+  },
+  selectedRadioButton: {
+    backgroundColor: 'yellow',
+  },
+  radioText: {
+    color: '#303030',
+    fontSize: 20,
+  },
   filePicker: {
     borderWidth: 1,
     borderColor: '#303030',
@@ -109,7 +147,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft:40,
+    marginLeft: 40,
   },
   filePickerText: {
     color: '#303030',
@@ -122,8 +160,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     elevation: 2,
     marginTop: 20,
+    alignSelf: 'center',
   },
-
   submitButtonText: {
     color: 'white',
     fontSize: 20,
@@ -149,7 +187,7 @@ const styles = StyleSheet.create({
   },
   linkContainer: {
     marginTop: 20,
-    marginLeft:50,
+    marginLeft: 50,
   },
   linkText: {
     fontSize: 18,

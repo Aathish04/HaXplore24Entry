@@ -41,14 +41,6 @@ def extract_frames_and_sampling_rate(video_filename, output_directory):
     # Release the video capture object
     cap.release()
 
-output_directory = 'frames/'
-filename = 'sample.MOV'
-extract_frames_and_sampling_rate(filename, output_directory)
-
-if len(os.listdir(output_directory)) > 0:
-    print("Frames extracted successfully.")
-else:
-    print("No frames extracted.")
 
 
 def get_image(image_path):
@@ -106,7 +98,11 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
     y = filtfilt(b, a, data)
     return y
 
-def getHR():
+def getHR(filename):
+
+    output_directory = 'frames/'
+    extract_frames_and_sampling_rate(filename, output_directory)
+
     x = get_signal_from()
 # Define the cutoff frequencies and order of the filter
     lowcut = 0.5  # Lower cutoff frequency in Hz
@@ -142,7 +138,7 @@ def getHR():
 
 if __name__ == "__main__":
     # Have an end point here
-    print(getHR())
+    print(getHR("sample.mp4"))
 
 
     
