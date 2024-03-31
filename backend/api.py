@@ -4,9 +4,14 @@ from fastapi import FastAPI,Request
 import backend.appwrite.appwrite_functionalities as appwrite_functionalities
 from backend.utils.digilocker import get_aadhaar,get_digilocker_flow_url
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 templates = Jinja2Templates(directory="backend/static/templates")
+
 @app.get("/digilocker_request_result_webhook")
 async def digilocker_request_result_webhook(request:Request):
     return templates.TemplateResponse(
