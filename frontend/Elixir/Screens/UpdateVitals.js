@@ -30,10 +30,10 @@ export default function UpdateVitals({ navigation }) {
                 {/* Hospital Visit Button */}
                 <TouchableOpacity 
                     style={[styles.individualButton, {borderColor: 'green'}]} 
-                    onPress={() => console.log('Hospital Visit')}
+                    onPress={() => {navigation.navigate('UpdateManually')}}
                 >
                     <FontAwesome name="hospital-o" size={40} color="green" />
-                    <Text style={styles.buttonText}>{processText("Update Vitals")}</Text>
+                    <Text style={styles.buttonText}>{processText("Update Manually")}</Text>
                 </TouchableOpacity>
 
             </View>

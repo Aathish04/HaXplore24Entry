@@ -1,4 +1,2 @@
-export default processText = (text) => {
-    // Example processing: convert text to uppercase
-    return text.toUpperCase()
-};
+import translations from "../cached_data/translated_texts_login.json";
+

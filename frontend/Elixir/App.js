@@ -9,6 +9,7 @@ import MedReminderScreen from './Screens/Reminder';
 import Login from './Screens/Login';
 import UpdateVitals from './Screens/UpdateVitals';
 import VideoRecorder from './Screens/Camera';
+import UpdateManually from './Screens/UpdateManually';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -24,6 +25,7 @@ export default function App() {
         <Stack.Screen name="UpdateVitals" component={UpdateVitals} options={{headerShown:false}}/>
         <Stack.Screen name="Login" component={Login} options={{headerShown:false}}/>
         <Stack.Screen name="Camera" component={VideoRecorder} options={{headerShown:false}}/>
+        <Stack.Screen name="UpdateManually" component={UpdateManually} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
