@@ -1,0 +1,7 @@
+Patient Name: Parthiban M
+Diagnosis: Wheezing
+Medication:
+1. Medication: Prednisone 20mg
+   Dosage: Take 1 tablet daily for 5 days to reduce inflammation.
+2. Medication: Montelukast 10mg
+   Dosage: Take 1 tablet daily for maintenance therapy.

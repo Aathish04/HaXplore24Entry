@@ -1,0 +1,6 @@
+Patient Name: Parthiban M
+Diagnosis: Fever
+Medication:
+1. Medication: Acetaminophen 500mg
+   Dosage: Take 1 tablet every 6 hours as needed for fever and pain.
+2. Medication: Fluids: Encourage increased fluid intake to stay hydrated.

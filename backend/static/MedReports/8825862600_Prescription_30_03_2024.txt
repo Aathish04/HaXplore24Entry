@@ -1,0 +1,11 @@
+Patient Name: Aathish S
+Diagnosis: Common Cold
+Medication:
+1. Medication: Ibuprofen 400mg
+   Dosage: Take 1 tablet every 6 hours as needed for fever and pain.
+2. Medication: Pseudoephedrine 60mg
+   Dosage: Take 1 tablet every 6 hours as needed for nasal congestion.
+3. Medication: Guaifenesin 600mg
+   Dosage: Take 1 tablet every 12 hours as needed for chest congestion.
+4. Medication: Loratadine 10mg
+   Dosage: Take 1 tablet once daily for relief from allergies.

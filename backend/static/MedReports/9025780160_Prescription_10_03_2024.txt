@@ -1,0 +1,7 @@
+Patient Name: Aathish S
+Diagnosis: Food Poisoning
+Medication:
+1. Medication: Oral Rehydration Solution (ORS)
+   Dosage: Drink 1-2 cups every hour to replenish lost fluids and electrolytes.
+2. Medication: Ondansetron 4mg
+   Dosage: Take 1 tablet every 8 hours as needed for nausea and vomiting.

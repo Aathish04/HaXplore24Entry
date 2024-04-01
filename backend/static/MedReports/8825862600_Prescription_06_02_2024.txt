@@ -1,0 +1,6 @@
+Patient Name: Aathish S
+Diagnosis: Viral Fever
+Medication:
+1. Medication: Paracetamol 650mg
+   Dosage: Take 1 tablet every 6 hours as needed for fever and pain.
+2. Medication: Rest: Advised to take plenty of rest and avoid strenuous activities.
