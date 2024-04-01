@@ -2,35 +2,34 @@ import React from 'react';
 import { View, Button, TouchableOpacity, Text } from 'react-native'; // Import TouchableOpacity and Text
 import { Ionicons, FontAwesome } from '@expo/vector-icons'; // Import Ionicons and FontAwesome icons
 import { StyleSheet } from 'react-native';
-import translations from "../cached_data/translated_texts_login.json";
+import translations from "../cached_data/translated_texts_updatevitals.json";
+import { useRoute } from '@react-navigation/native';
 
-export default function UpdateVitals({ navigation }) {
+import { useNavigation } from "@react-navigation/native";
+export default function UpdateVitals({ language }) {
     // Define functions for button click events
-    const checkVitals = () => {
-        // Add your logic for checking vitals here
-        console.log("Checking Vitals...");
-    }
+    
 
-    const updateVitals = () => {
-        // Add your logic for updating vitals here
-        console.log("Updating Vitals...");
-    }
+  const route = useRoute()
+  const { params, path, name } = route;
+  const navigation = useNavigation();
 
-    function processText(key,language='ta')
+
+    function processText(key)
     {
-        // if (translations[key][language]) 
-        // {
-        //     // Return the translation for the specified language
-        //     return translations[key][language];
+        if (translations[key][language]) 
+        {
+            // Return the translation for the specified language
+            return translations[key][language];
         
-        // } 
-        // else
-        //    {
-        //     // If the specified language doesn't exist, fallback to English
-        //     return translations[key]['en'];
-        //  }   
+        } 
+        else
+           {
+            // If the specified language doesn't exist, fallback to English
+            return translations[key]['en'];
+         }   
          
-         return key.toUpperCase();
+         
     }
 
     return (
@@ -39,7 +38,7 @@ export default function UpdateVitals({ navigation }) {
                 {/* Medical Records Button */}
                 <TouchableOpacity 
                     style={[styles.individualButton, {borderColor: 'blue'}]} 
-                    onPress={() => {navigation.navigate('Camera')}}
+                    onPress={() => {navigation.navigate('Camera',params)}}
                 >
                     <Ionicons name="document-text-outline" size={40} color="blue" />
                     <Text style={styles.buttonText}>{processText("Record Vitals")}</Text>
@@ -48,7 +47,7 @@ export default function UpdateVitals({ navigation }) {
                 {/* Hospital Visit Button */}
                 <TouchableOpacity 
                     style={[styles.individualButton, {borderColor: 'green'}]} 
-                    onPress={() => {navigation.navigate('UpdateManually')}}
+                    onPress={() => {navigation.navigate('UpdateManually', params)}}
                 >
                     <FontAwesome name="hospital-o" size={40} color="green" />
                     <Text style={styles.buttonText}>{processText("Update Manually")}</Text>

@@ -4,12 +4,31 @@ import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import { useRoute } from '@react-navigation/native';
+import translations from "../cached_data/translated_texts_medicalrecords.json";
+import { useNavigation } from "@react-navigation/native";
 
-const MedicalRecordsPage = ({ navigation }) => {
+const MedicalRecordsPage = ({ language }) => {
   const [fileUri, setFileUri] = useState(null);
   const [filename, setFilename] = useState(null);
+  const [filetype, setFiletype] = useState(null);
+  const [file, setFile] = useState(null);
   const [link, setLink] = useState('');
-  const [recordType, setRecordType] = useState('Prescription'); // Default to Prescription
+  const [recordType, setRecordType] = useState('prescription'); // Default to Prescription
+
+  function getFileExtension(uri) {
+    // Extract the filename from the URI
+    const filename = uri.split('/').pop();
+  
+    // Extract the file extension from the filename
+    const fileExtension = filename.split('.').pop();
+  
+    return fileExtension.toLowerCase(); // Return the lowercase file extension
+  }
+
+  const navigation = useNavigation()
+
+
 
   const pickPDF = async () => {
     try {
@@ -19,6 +38,7 @@ const MedicalRecordsPage = ({ navigation }) => {
       if (result.canceled == false) {
         setFileUri(result.assets[0].uri);
         setFilename(result.assets[0].name);
+        setFiletype("pdf")
       }
     } catch (err) {
       console.error('Error picking PDF file:', err);
@@ -33,8 +53,11 @@ const MedicalRecordsPage = ({ navigation }) => {
         quality: 1,
       });
       if (!result.cancelled) {
+        console.log(result.assets[0].uri);
         setFileUri(result.assets[0].uri);
         setFilename(result.assets[0].fileName);
+        setFiletype(getFileExtension(fileUri))
+        console.log(filetype);
       }
     } catch (err) {
       console.error('Error picking image:', err);
@@ -46,10 +69,88 @@ const MedicalRecordsPage = ({ navigation }) => {
     setLink(fakeLink);
   };
 
-  function processText(key,language='ta')
+  function processText(key)
   {
-      return key.toUpperCase();  
+    if (translations[key][language]) 
+    {
+        // Return the translation for the specified language
+        return translations[key][language];
+    } 
+    else
+       {
+        // If the specified language doesn't exist, fallback to English
+        return translations[key]['en'];
+     }     
+    
   }
+
+  const route = useRoute()
+  const { params, path, name } = route;
+ 
+  
+
+  async function sendRequest()
+  {
+    try {
+      const url = 'https://commonly-liberal-porpoise.ngrok-free.app/perform_ocr'; // Replace 'https://api.example.com/post' with your actual endpoint URL
+    
+      // Data to be sent in the request body
+      const file = await uriToBinary(fileUri);
+      setFile(file);
+
+      const requestBody = {
+        user_id: params['$id'],
+        record_type: recordType,
+        type: filetype,
+        binary: file
+
+        // Add more key-value pairs as needed
+      };
+      // console.log(requestBody)
+      const response = await fetch(url, {
+        method: 'POST', // Specify the HTTP method
+        headers: {
+          'Content-Type': 'application/json', // Specify the content type (JSON in this case)
+          // Add more headers if required
+        },
+        body: JSON.stringify(requestBody), // Convert the request body to JSON format
+      });
+    
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    
+      const responseData = await response.json(); // Parse the response JSON
+    
+      // Handle the response data
+      console.log('Response data:', responseData);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+    
+  }
+
+
+
+async function uriToBinary(localUri) {
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(localUri); // Get file information
+    if (!fileInfo.exists) {
+      throw new Error('File does not exist');
+    }
+
+    const { uri } = fileInfo;
+    const binaryData = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64, // Read file as Base64 encoded string
+    });
+
+    return binaryData;
+  } catch (error) {
+    console.error('Error converting URI to binary:', error);
+    return null;
+  }
+}
+
 
   return (
     <View style={styles.container}>
@@ -59,14 +160,14 @@ const MedicalRecordsPage = ({ navigation }) => {
       </View>
       <View style={styles.radioContainer}>
         <TouchableOpacity
-          style={[styles.radioButton, recordType === 'Prescription' && styles.selectedRadioButton]}
-          onPress={() => setRecordType('Prescription')}
+          style={[styles.radioButton, recordType === 'prescription' && styles.selectedRadioButton]}
+          onPress={() => setRecordType('prescription')}
         >
           <Text style={styles.radioText}>{processText("Prescription")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.radioButton, recordType === 'Report' && styles.selectedRadioButton]}
-          onPress={() => setRecordType('Report')}
+          style={[styles.radioButton, recordType === 'report' && styles.selectedRadioButton]}
+          onPress={() => setRecordType('report')}
         >
           <Text style={styles.radioText}>{processText("Report")}</Text>
         </TouchableOpacity>
@@ -87,7 +188,7 @@ const MedicalRecordsPage = ({ navigation }) => {
           )}
         </View>
       )}
-      <Pressable style={styles.submitButton} onPress={handleSubmit}>
+      <Pressable style={styles.submitButton} onPress={sendRequest}>
         <Text style={styles.submitButtonText}>{processText("Submit")}  </Text>
       </Pressable>
       {link !== '' && (

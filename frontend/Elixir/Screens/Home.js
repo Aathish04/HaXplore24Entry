@@ -6,13 +6,17 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 import translations from "../cached_data/translated_texts_home.json";
+import { useNavigation } from "@react-navigation/native";
+import { account } from './Login';
+import * as Linking from 'expo-linking';
 
-const AppPage = ({ navigation }) => {
+const AppPage = ({language}) => {
   //Slide till sos
   const slideX = useRef(new Animated.Value(0)).current;
   const [sosActivated, setSosActivated] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  
+  const navigation = useNavigation()
+
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: Animated.event([null, { dx: slideX }], {
@@ -32,8 +36,10 @@ const AppPage = ({ navigation }) => {
           toValue: 220,
           duration: 200,
           useNativeDriver: true,
-        }).start();
-
+        }).start(() => {
+          // Open URL after showing the modal
+          Linking.openURL('tel:102');
+        });
         console.log(route.params);
       } else {
         // Slide back to start if not reached the end
@@ -44,7 +50,6 @@ const AppPage = ({ navigation }) => {
       }
     },
   });
-
   const handleCancelSOS = () => {
     setModalVisible(false); // Hide modal
     setSosActivated(false); // Reset SOS activation
@@ -54,6 +59,8 @@ const AppPage = ({ navigation }) => {
       duration: 200,
       useNativeDriver: true,
     }).start();
+
+
   };
 
   // Dummy action for button press
@@ -65,8 +72,9 @@ const AppPage = ({ navigation }) => {
   const { params, path, name } = route;
   const photo = 'data:image/jpeg;base64,' + params.Photograph
 
+  console.log(params)
 
-  function processText(key,language='en')
+  function processText(key)
   {
       if (translations[key][language]) 
       {
@@ -86,7 +94,16 @@ const AppPage = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <View style = {{flexDirection: 'row'}}>
         <AntDesign style={styles.settings} name="setting" size={35} color="black" onPress={() => { navigation.navigate('Settings') }} />
+        <AntDesign style={{paddingLeft: 300}} name="logout" size={35} color="black" onPress={ async () =>  { 
+         await  account.deleteSessions()
+      
+          console.log("Deleted...")
+          
+          navigation.goBack()} } />
+        </View>
+
         <View style={styles.profileContainer}>
           <View style={styles.profileImageContainer}>
             {/* Display the base64 image */}
@@ -95,59 +112,6 @@ const AppPage = ({ navigation }) => {
             <View />
           </View>
           <Text style={styles.profileName}>{processText("Welcome, ")} {params.Name} 👋</Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          {/* Medical Records Button */}
-          <TouchableOpacity
-            style={[styles.individualButton, { borderColor: 'blue' }]}
-            onPress={() => { navigation.navigate('MedicalRecords') }}
-          >
-            <Ionicons name="document-text-outline" size={40} color="blue" />
-            <Text style={styles.buttonText}>{processText("Medical Records")}</Text>
-          </TouchableOpacity>
-
-          {/* Hospital Visit Button */}
-          <TouchableOpacity
-            style={[styles.individualButton, { borderColor: 'green' }]}
-            onPress={() => console.log('Hospital Visit')}
-          >
-            <FontAwesome name="hospital-o" size={40} color="green" />
-            <Text style={styles.buttonText}>{processText("Doctor Visit")}</Text>
-          </TouchableOpacity>
-
-          {/* Medicine Reminder Button */}
-          <TouchableOpacity
-            style={[styles.individualButton, { borderColor: 'orange' }]}
-            onPress={() => { navigation.navigate('MedReminder') }}
-          >
-            <Ionicons name="timer-outline" size={40} color="orange" />
-            <Text style={styles.buttonText}>{processText("Teleconsult")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.individualButton, { borderColor: 'orange' }]}
-            onPress={() => { navigation.navigate('MedReminder') }}
-          >
-            <Ionicons name="timer-outline" size={40} color="orange" />
-            <Text style={styles.buttonText}>{processText("Generate Reports")}</Text>
-          </TouchableOpacity>
-
-
-          <TouchableOpacity
-            style={[styles.individualButton, { borderColor: 'orange' }]}
-            onPress={() => { navigation.navigate('MedReminder') }}
-          >
-            <Ionicons name="timer-outline" size={40} color="orange" />
-            <Text style={styles.buttonText}>Dummy</Text>
-          </TouchableOpacity>
-
-          {/* Check Up Button */}
-          <TouchableOpacity
-            style={[styles.individualButton, { borderColor: 'red' }]}
-            onPress={() => navigation.navigate('UpdateVitals')}
-          >
-            <Ionicons name="heart-outline" size={40} color="red" />
-            <Text style={styles.buttonText}>{processText("Measure Vitals")}</Text>
-          </TouchableOpacity>
         </View>
         <Modal
           animationType="slide"
@@ -174,6 +138,60 @@ const AppPage = ({ navigation }) => {
           </Animated.View>
           <Text style={{ marginLeft: 90 }}>{processText("Slide this button to activate")}</Text>
         </View>
+        <View style={styles.buttonContainer}>
+          {/* Medical Records Button */}
+          <TouchableOpacity
+            style={[styles.individualButton, { borderColor: 'blue' }]}
+            onPress={() => { navigation.navigate('MedicalRecords', params) }}
+          >
+            <Ionicons name="document-attach-outline" size={40} color="blue" />
+            <Text style={styles.buttonText}>{processText("Medical Records")}</Text>
+          </TouchableOpacity>
+
+          {/* Hospital Visit Button */}
+          <TouchableOpacity
+            style={[styles.individualButton, { borderColor: 'green' }]}
+            onPress={() => console.log('Hospital Visit')}
+          >
+            <FontAwesome name="hospital-o" size={40} color="green" />
+            <Text style={styles.buttonText}>{processText("Doctor Visit")}</Text>
+          </TouchableOpacity>
+
+          {/* Medicine Reminder Button */}
+          <TouchableOpacity
+            style={[styles.individualButton, { borderColor: 'orange' }]}
+            onPress={() => { navigation.navigate('MedReminder') }}
+          >
+            <Ionicons name="timer-outline" size={40} color="orange" />
+            <Text style={styles.buttonText}>{processText("Teleconsult")}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.individualButton, { borderColor: 'pink' }]}
+            onPress={() => { navigation.navigate('MedReminder') }}
+          >
+            <Ionicons name="document-outline" size={40} color="orange" />
+            <Text style={styles.buttonText}>{processText("Generate Reports")}</Text>
+          </TouchableOpacity>
+
+
+          {/* <TouchableOpacity
+            style={[styles.individualButton, { borderColor: 'orange' }]}
+            onPress={() => { navigation.navigate('MedReminder') }}
+          >
+            <Ionicons name="timer-outline" size={40} color="orange" />
+            <Text style={styles.buttonText}>Dummy</Text>
+          </TouchableOpacity> */}
+
+          {/* Check Up Button */}
+          <TouchableOpacity
+            style={[styles.individualButton, { borderColor: 'red' }]}
+            onPress={() => navigation.navigate('UpdateVitals',params)}
+          >
+            <Ionicons name="heart-outline" size={40} color="red" />
+            <Text style={styles.buttonText}>{processText("Measure Vitals")}</Text>
+          </TouchableOpacity>
+        </View>
+        
       </ScrollView>
     </SafeAreaView>
   );
