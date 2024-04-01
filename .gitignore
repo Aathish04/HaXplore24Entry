@@ -161,3 +161,4 @@ cython_debug/
 backend/frames/*
 
 backend/ipfs/ipfs_data
+frames/*

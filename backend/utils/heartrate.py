@@ -5,8 +5,8 @@ import heartpy as hp
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+from joblib import load
 
-dur = 0
 # Function to extract frames from the video and find the sampling rate
 def extract_frames_and_sampling_rate(video_filename, output_directory):
     # Create the output directory if it doesn't exist
@@ -19,7 +19,7 @@ def extract_frames_and_sampling_rate(video_filename, output_directory):
     fps = cap.get(cv2.CAP_PROP_FPS) 
   
 #    calculate duration of the video 
-    global dur
+    
     dur = round(frames / fps)
     # Initialize frame count
     frame_count = 0
@@ -40,6 +40,7 @@ def extract_frames_and_sampling_rate(video_filename, output_directory):
 
     # Release the video capture object
     cap.release()
+    return dur
 
 
 
@@ -101,7 +102,7 @@ def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
 def getHR(filename):
 
     output_directory = 'frames/'
-    extract_frames_and_sampling_rate(filename, output_directory)
+    dur = extract_frames_and_sampling_rate(filename, output_directory)
 
     x = get_signal_from()
 # Define the cutoff frequencies and order of the filter
@@ -112,33 +113,29 @@ def getHR(filename):
 # Apply the bandpass filter to the PPG signal
     filtered_ppg_signal = butter_bandpass_filter(x, lowcut, highcut, len(x)/dur, order)
 
+
 # Process the filtered PPG signal with HeartPy
     wd_filtered, m_filtered = hp.process(filtered_ppg_signal, sample_rate=len(x)/dur)
-
-# # Plot the filtered PPG signal
-#     plt.figure(figsize=(12, 4))
-#     plt.plot(filtered_ppg_signal, label='Filtered PPG Signal')
-#     plt.title('Filtered PPG Signal')
-#     plt.xlabel('Sample')
-#     plt.ylabel('Amplitude')
-#     plt.legend()
-#     plt.grid(True)
-#     plt.show()
-
-# Plot HeartPy's processing results on the filtered signal
-    # plt.figure(figsize=(12, 6))
-    # hp.plotter(wd_filtered, m_filtered)
-    # plt.show()
+    print("NO of signal points", len(x))
+    # Load the saved SVR model
+    loaded_model = load('backend/utils/svr_model.joblib')
 
 
-    # for measure in m_filtered.keys():
-    #     print('%s: %f' %(measure, m_filtered[measure]))
+# # Perform prediction using the loaded model
 
+#     t = np.array([filtered_ppg_signal])
+#     svr_pred = loaded_model.predict(t)
+
+# # Print the predicted glucose value
+#     print('Predicted Glucose:', svr_pred)
+#     m_filtered['glucose_level'] = svr_pred[0]
+    
     return m_filtered
+
 
 if __name__ == "__main__":
     # Have an end point here
-    print(getHR("sample.mp4"))
+    print(getHR("902578060.mp4"))
 
 
     

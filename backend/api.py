@@ -10,8 +10,13 @@ from fastapi.templating import Jinja2Templates
 from datetime import date
 import backend.utils.ocr as ocr
 from backend.ipfs import ipfs
+from backend.utils.heartrate import getHR
 import tempfile
 import os
+from starlette.responses import JSONResponse
+import base64
+
+
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="backend/static"), name="static")
@@ -104,6 +109,40 @@ async def perform_ocr(request:Request):
         document_id = ID.unique(),
         data = data, # optional
     )
+
+@app.post("/gethr")
+async def gethr(request:Request):
+    # {"userid":"str","ext":"mp4","data":"base64"}
+    data = await request.json()
+    userid = data.get("userid")
+    ext = data.get("ext")
+    base64_data = data.get("data")
+
+    if not (userid and ext and base64_data):
+        return JSONResponse({"error": "Incomplete data provided"}, status_code=400)
+
+    try:
+        # Decode base64 data
+        binary_data = base64.b64decode(base64_data)
+
+        # Save binary data to a temporary file
+        filename = f"{userid}.{ext}"
+        with open(filename, "wb") as file:
+            file.write(binary_data)
+
+        # Return a response confirming successful storage
+        v = getHR(filename)
+        with open("x.json","w") as f:
+            import json
+            json.dump(v,f)
+        res = JSONResponse(v)
+        #return JSONResponse({"message": f"File {filename} stored successfully"}, status_code=200)
+        return res
+    
+    except Exception as e:
+        return JSONResponse({"error": f"Failed to store file: {str(e)}"}, status_code=500)
+
+
 
 if __name__ == "__main__":
     import uvicorn
